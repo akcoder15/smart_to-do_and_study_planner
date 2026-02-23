@@ -3,6 +3,17 @@ import sqlite3 # Importing sqlite for database management
 con = sqlite3.connect("tasks.db") # Connecting to database
 cur = con.cursor() # Creating a cursor to execute SQL commands
 
+cur.execute('''
+    CREATE TABLE IF NOT EXISTS tasks (
+        id INTEGER PRIMARY KEY,
+        title TEXT NOT NULL,
+        subject TEXT,
+        deadline DATETIME,
+        priority TEXT,
+        duration_est INTEGER,
+        status TEXT
+    )
+''') # Creating table
 
 # Aesthetics
 print("________________________")
