@@ -10,7 +10,7 @@ def main():
     cur.execute('''
         CREATE TABLE IF NOT EXISTS tasks (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            title TEXT NOT NULL,
+            task TEXT NOT NULL,
             subject TEXT,
             deadline DATETIME,
             priority TEXT,
