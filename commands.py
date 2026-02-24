@@ -74,3 +74,24 @@ def done(con, cur):
         print("COULD NOT FIND ROW ID")
     else:
         print("MARKED DONE!")
+
+
+def today(cur):
+
+    cur.execute("""
+                SELECT id, title, deadline, priority 
+                FROM tasks 
+                WHERE status != 'Done' 
+                AND date(deadline) >= date('now', 'localtime') 
+                AND date(deadline) <= date('now', 'localtime','+3 days')
+                ORDER BY deadline ASC LIMIT 5
+                """)
+    results = cur.fetchall()
+
+    if not results:
+        print("NO PRIORITY TASKS FOR NEXT 3 DAYS")
+    else:
+        print("\n--- UPCOMING URGENT TASKS ---")
+        for row in results:
+            # row[0] is id, row[1] is title, etc.
+            print(f"ID: {row[0]} | Task: {row[1]} | Due: {row[2]} | Priority: {row[3]}")
