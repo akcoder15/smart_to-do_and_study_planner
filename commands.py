@@ -16,6 +16,17 @@ con = sqlite3.connect("tasks.db") # Connecting to database
 cur = con.cursor() # Creating a cursor to execute SQL commands
 
 
+def show(cur):
+
+    cur.execute("SELECT id, title, deadline, priority, duration, status FROM tasks ORDER BY status DESC")
+    result = cur.fetchall()
+
+    if not result:
+        print("\nYour task list is empty!")
+    else:
+        for row in result:
+            print(f"id: {row[0]:<4}| task: {row[1]:<20}| deadline: {row[2]:<20}| priority: {row[3]:<8}| duration: {row[4]}| status: {row[5]:<6}")
+
 def add(con, cur):
 
     title = input("Enter task title: ")
