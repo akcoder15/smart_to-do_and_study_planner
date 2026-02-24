@@ -31,6 +31,11 @@ def add(con, cur):
     """, (title, subject, deadline, priority, duration))
     con.commit()
 
+    if cur.rowcount == 0: # Checks if any row was modified
+        print("INSERTION FAILED")
+    else:
+        print("INSERTION SUCCESSFULL!")
+
 
 def edit(con, cur):
 
@@ -50,9 +55,22 @@ def edit(con, cur):
         con.commit()
 
         if cur.rowcount == 0: # Checks if any row was modified
-            print("Update failed: No task found with that ID.")
+            print("NO TASK FOUND WITH THAT ID")
         else:
-            print("Update successful!")
+            print("UPDATE SUCCESSFUL!")
     
     else:
         print("Invalid column entered")
+
+
+def done(con, cur):
+
+    row = int(input("Enter row id to be marked as done: "))
+    
+    cur.execute("UPDATE tasks SET status = ? WHERE id = ?",("Done", row))
+    con.commit()
+
+    if cur.rowcount == 0: # Checks if any row was modified
+        print("COULD NOT FIND ROW ID")
+    else:
+        print("MARKED DONE!")
