@@ -1,6 +1,7 @@
 import sqlite3
 from datetime import datetime
 
+
 def get_deadline(): #Accept and format deadline date input
     while True:
         user_input = input("Enter deadline (YYYY-MM-DD HH:MM): ")
@@ -14,7 +15,9 @@ def get_deadline(): #Accept and format deadline date input
 con = sqlite3.connect("tasks.db") # Connecting to database
 cur = con.cursor() # Creating a cursor to execute SQL commands
 
-def add(cur):
+
+def add(con, cur):
+
     title = input("Enter task title: ")
     subject = input("Enter subject: ")
     deadline = get_deadline()
@@ -26,4 +29,30 @@ def add(cur):
     INSERT INTO tasks (title, subject, deadline, priority, duration, status) 
     VALUES (?, ?, ?, ?, ?, "Pending")
     """, (title, subject, deadline, priority, duration))
+    con.commit()
 
+
+def edit(con, cur):
+
+    valid_columns = ["title", "subject", "deadline", "priority", "duration"]
+    row = int(input("Enter row id number to be changed: "))
+    column = input("Enter column name: ")
+    
+    if column.lower() in valid_columns: #Checking if column name entered is valid
+        if column.lower() == "duration":
+            value = int(input("Enter new value: "))
+        elif column.lower() == "deadline":
+            value = get_deadline()
+        else:
+            value = input("Enter new value: ")
+    
+        cur.execute(f"UPDATE tasks SET {column.lower()} = ? WHERE id = ?", (value, row))
+        con.commit()
+
+        if cur.rowcount == 0: # Checks if any row was modified
+            print("Update failed: No task found with that ID.")
+        else:
+            print("Update successful!")
+    
+    else:
+        print("Invalid column entered")
