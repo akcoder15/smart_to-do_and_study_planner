@@ -95,3 +95,16 @@ def today(cur):
         for row in results:
             # row[0] is id, row[1] is title, etc.
             print(f"ID: {row[0]} | Task: {row[1]} | Due: {row[2]} | Priority: {row[3]}")
+
+
+def delete(con, cur):
+
+    row = int(input("Enter row id to be marked as done: "))
+    
+    cur.execute("DELETE FROM tasks WHERE id = ?",(row,))
+    con.commit()
+
+    if cur.rowcount == 0: # Checks if any row was modified
+        print("COULD NOT FIND ROW ID")
+    else:
+        print("DELETED")
